@@ -17,7 +17,8 @@ namespace ACTVOT.Web.Migrations
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Actstar = table.Column<DateTime>(nullable: false),
                     Endstar = table.Column<DateTime>(nullable: false),
-                    ImageUrl = table.Column<string>(nullable: true)
+                    ImageUrl = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {

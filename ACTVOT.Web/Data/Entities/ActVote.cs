@@ -23,7 +23,11 @@ namespace ACTVOT.Web.Data.Entities
 
             [Display(Name = "Image")]
             public string ImageUrl { get; set; }
-      
+
+           [MaxLength(100, ErrorMessage = "The fild {0} only can contain{1} characters length.")]
+           [Required]
+           public string Description { get; set; }
+
 
 
     }

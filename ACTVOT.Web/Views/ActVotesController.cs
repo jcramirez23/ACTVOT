@@ -8,24 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using ACTVOT.Web.Data;
 using ACTVOT.Web.Data.Entities;
 
-namespace ACTVOT.Web.Controllers
+namespace ACTVOT.Web.Views
 {
-    public class ActVotes1Controller : Controller
+    public class ActVotesController : Controller
     {
         private readonly DataContext _context;
 
-        public ActVotes1Controller(DataContext context)
+        public ActVotesController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: ActVotes1
+        // GET: ActVotes
         public async Task<IActionResult> Index()
         {
             return View(await _context.ActVotes.ToListAsync());
         }
 
-        // GET: ActVotes1/Details/5
+        // GET: ActVotes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,13 +43,13 @@ namespace ACTVOT.Web.Controllers
             return View(actVote);
         }
 
-        // GET: ActVotes1/Create
+        // GET: ActVotes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ActVotes1/Create
+        // POST: ActVotes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -65,7 +65,7 @@ namespace ACTVOT.Web.Controllers
             return View(actVote);
         }
 
-        // GET: ActVotes1/Edit/5
+        // GET: ActVotes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,7 +81,7 @@ namespace ACTVOT.Web.Controllers
             return View(actVote);
         }
 
-        // POST: ActVotes1/Edit/5
+        // POST: ActVotes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -116,7 +116,7 @@ namespace ACTVOT.Web.Controllers
             return View(actVote);
         }
 
-        // GET: ActVotes1/Delete/5
+        // GET: ActVotes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +134,7 @@ namespace ACTVOT.Web.Controllers
             return View(actVote);
         }
 
-        // POST: ActVotes1/Delete/5
+        // POST: ActVotes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
