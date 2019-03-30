@@ -24,9 +24,9 @@
 
             if (!this.context.ActVotes.Any())
             {
-                this.AddActvote("First Product");
-                this.AddActvote("Second Product");
-                this.AddActvote("Third Product");
+                this.AddActvote("Precidencials");
+                this.AddActvote("alcaldes");
+                this.AddActvote("senado");
                 await this.context.SaveChangesAsync();
             }
         }
