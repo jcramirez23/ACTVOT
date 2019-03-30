@@ -12,29 +12,28 @@ namespace ACTVOT.Web.Controllers
 {
     public class ActVotes1Controller : Controller
     {
-        private readonly DataContext _context;
+        private readonly IRepository repository;
 
-        public ActVotes1Controller(DataContext context)
+        public ActVotes1Controller(IRepository repository)
         {
-            _context = context;
+            this.repository = repository;
         }
 
-        // GET: ActVotes1
-        public async Task<IActionResult> Index()
+        // GET: ActVotes
+        public IActionResult Index()
         {
-            return View(await _context.ActVotes.ToListAsync());
+            return View(this.repository.GetActVotes());
         }
-
-        // GET: ActVotes1/Details/5
-        public async Task<IActionResult> Details(int? id)
+        
+        // GET: ActVotes/Details/5
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var actVote = await _context.ActVotes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var actVote = this.repository.GetActVote(id.Value);
             if (actVote == null)
             {
                 return NotFound();
@@ -43,37 +42,35 @@ namespace ACTVOT.Web.Controllers
             return View(actVote);
         }
 
-        // GET: ActVotes1/Create
+        // GET: ActVotes/Create
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: ActVotes1/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Actstar,Endstar,ImageUrl,Description")] ActVote actVote)
+        public async Task<IActionResult> Create( ActVote actVote)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(actVote);
-                await _context.SaveChangesAsync();
+                this.repository.AddActVote(actVote);
+                await this.repository.SaveAllAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(actVote);
         }
 
         // GET: ActVotes1/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var actVote = await _context.ActVotes.FindAsync(id);
+            var actVote = this.repository.GetActVote(id.Value);
             if (actVote == null)
             {
                 return NotFound();
@@ -82,30 +79,23 @@ namespace ACTVOT.Web.Controllers
         }
 
         // POST: ActVotes1/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Actstar,Endstar,ImageUrl,Description")] ActVote actVote)
+        public async Task<IActionResult> Edit(ActVote actVote)
         {
-            if (id != actVote.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(actVote);
-                    await _context.SaveChangesAsync();
+                    this.repository.UpdateActVote(actVote);
+                    await this.repository.SaveAllAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ActVoteExists(actVote.Id))
+                    if (!this.repository.ActVoteExists(actVote.Id))
                     {
                         return NotFound();
-                    }
+                    }  
                     else
                     {
                         throw;
@@ -117,15 +107,15 @@ namespace ACTVOT.Web.Controllers
         }
 
         // GET: ActVotes1/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var actVote = await _context.ActVotes
-                .FirstOrDefaultAsync(m => m.Id == id);
+           var actVote = this.repository.GetActVote(id.Value);
+           
             if (actVote == null)
             {
                 return NotFound();
@@ -139,15 +129,10 @@ namespace ACTVOT.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var actVote = await _context.ActVotes.FindAsync(id);
-            _context.ActVotes.Remove(actVote);
-            await _context.SaveChangesAsync();
+            var actVote = this.repository.GetActVote(id);
+            this.repository.RemoveActVote(actVote);
+            await this.repository.SaveAllAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool ActVoteExists(int id)
-        {
-            return _context.ActVotes.Any(e => e.Id == id);
         }
     }
 }

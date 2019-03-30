@@ -26,7 +26,7 @@ namespace ACTVOT.Web.Data.Entities
 
            [MaxLength(100, ErrorMessage = "The fild {0} only can contain{1} characters length.")]
            [Required]
-           public string Description { get; set; }
+           public string Description     { get; set; }
 
 
 
