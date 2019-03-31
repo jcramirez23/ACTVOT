@@ -1,39 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ACTVOT.Web.Data;
-using ACTVOT.Web.Data.Entities;
-
+﻿
 namespace ACTVOT.Web.Controllers
 {
+    using System.Threading.Tasks;
+    using Data;
+    using Data.Entities;
+    using Helpers;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+
     public class ActVotes1Controller : Controller
     {
-        private readonly IRepository repository;
+        private readonly IActVoteRepository actVoteRepository;
+        private readonly IUserHelper userHelper;
 
-        public ActVotes1Controller(IRepository repository)
+        public ActVotes1Controller(IActVoteRepository actVoteRepository,IUserHelper userHelper)
         {
-            this.repository = repository;
+            this.actVoteRepository = actVoteRepository;
+            this.userHelper = userHelper;
         }
 
         // GET: ActVotes
         public IActionResult Index()
         {
-            return View(this.repository.GetActVotes());
+            return View(this.actVoteRepository.GetAll());
         }
         
         // GET: ActVotes/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> DetailsAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var actVote = this.repository.GetActVote(id.Value);
+            var actVote = await this.actVoteRepository.GetByIdAsync(id.Value);
             if (actVote == null)
             {
                 return NotFound();
@@ -55,22 +55,23 @@ namespace ACTVOT.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                this.repository.AddActVote(actVote);
-                await this.repository.SaveAllAsync();
+                //TODO:Change for the logged user
+                actVote.user = await this.userHelper.GetUserByEmailAsync("jcamilor.454@gmail.com");
+                await this.actVoteRepository.CreateAsync(actVote);
                 return RedirectToAction(nameof(Index));
             }
             return View(actVote);
         }
 
         // GET: ActVotes1/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var actVote = this.repository.GetActVote(id.Value);
+            var actVote = await this.actVoteRepository.GetByIdAsync(id.Value);
             if (actVote == null)
             {
                 return NotFound();
@@ -87,12 +88,13 @@ namespace ACTVOT.Web.Controllers
             {
                 try
                 {
-                    this.repository.UpdateActVote(actVote);
-                    await this.repository.SaveAllAsync();
+                    //TODO:Change for the logged user
+                    actVote.user = await this.userHelper.GetUserByEmailAsync("jcamilor.454@gmail.com");
+                    await this.actVoteRepository.UpdateAsync(actVote);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.repository.ActVoteExists(actVote.Id))
+                    if (!await this.actVoteRepository.ExistAsync(actVote.Id))
                     {
                         return NotFound();
                     }  
@@ -107,15 +109,15 @@ namespace ACTVOT.Web.Controllers
         }
 
         // GET: ActVotes1/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-           var actVote = this.repository.GetActVote(id.Value);
-           
+           var actVote = await this.actVoteRepository.GetByIdAsync(id.Value);
+
             if (actVote == null)
             {
                 return NotFound();
@@ -129,9 +131,8 @@ namespace ACTVOT.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var actVote = this.repository.GetActVote(id);
-            this.repository.RemoveActVote(actVote);
-            await this.repository.SaveAllAsync();
+            var actVote = await this.actVoteRepository.GetByIdAsync(id);
+            await this.actVoteRepository.DeleteAsync(actVote);
             return RedirectToAction(nameof(Index));
         }
     }

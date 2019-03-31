@@ -6,7 +6,7 @@ namespace ACTVOT.Web.Data.Entities
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class ActVote
+    public class ActVote : IEntity
     {         
             public int Id { get; set; }
 
@@ -27,6 +27,8 @@ namespace ACTVOT.Web.Data.Entities
            [MaxLength(100, ErrorMessage = "The fild {0} only can contain{1} characters length.")]
            [Required]
            public string Description     { get; set; }
+
+           public User user { get; set; }
 
 
 
