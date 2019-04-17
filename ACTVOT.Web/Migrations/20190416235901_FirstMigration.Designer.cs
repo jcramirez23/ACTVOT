@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ACTVOT.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190331172945_CountryAndCandidat")]
-    partial class CountryAndCandidat
+    [Migration("20190416235901_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
