@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\images\Candidate\" />
+    <Folder Include="wwwroot\images\ActVot\" />
   </ItemGroup>
 
 </Project>
