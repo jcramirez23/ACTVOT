@@ -16,7 +16,7 @@ namespace ACTVOT.Web.Controllers.API
         [HttpGet]
         public IActionResult GetActvotes()
         {
-            return Ok(this.actVoteRepository.GetAllWithUsers());  
+            return Ok(this.actVoteRepository.GetAllWithUsers()) ;  
 
         }
     }
