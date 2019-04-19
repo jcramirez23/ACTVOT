@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using ACTVOT.Web.Models;
     using Data;
@@ -24,7 +25,7 @@
         // GET: ActVotes
         public IActionResult Index()
         {
-            return View(this.actVoteRepository.GetAll());
+            return View(this.actVoteRepository.GetAll().OrderBy(p=>p.Name));
         }
 
         // GET: ActVotes/Details/5

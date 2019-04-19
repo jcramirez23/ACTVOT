@@ -30,6 +30,20 @@ namespace ACTVOT.Web.Data.Entities
 
            public User user { get; set; }
 
+           public string ImageFullPath
+           {
+              get
+              {
+                  if(string.IsNullOrEmpty(this.ImageUrl))
+                  {
+                    return null;
+                  }
+                return $"https://myactivityvote.azurewebsites.net/{this.ImageUrl.Substring(1)}";
+
+              }
+
+            }  
+
 
 
     }
