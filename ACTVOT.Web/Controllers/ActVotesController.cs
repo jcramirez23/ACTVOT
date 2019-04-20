@@ -62,17 +62,20 @@
 
                 if (view.ImageFile != null && view.ImageFile.Length > 0)
                 {
+                    var guid = Guid.NewGuid().ToString();
+                    var file = $"{guid}.jpg";
+
                     path = Path.Combine(
                         Directory.GetCurrentDirectory(),
                         "wwwroot\\images\\Actvot",
-                        view.ImageFile.FileName);
+                       file);
 
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
                         await view.ImageFile.CopyToAsync(stream);
                     }
 
-                    path = $"~/images/Actvot/{view.ImageFile.FileName}";
+                    path = $"~/images/Actvot/{file}";
                 }
                 var Actvote = this.ToActvote(view, path);
                 //TODO:Change for the logged user
@@ -145,17 +148,20 @@
                     var path = view.ImageUrl;
                     if (view.ImageFile != null && view.ImageFile.Length > 0)
                     {
+                        var guid = Guid.NewGuid().ToString();
+                        var file = $"{guid}.jpg";
+
                         path = Path.Combine(
                             Directory.GetCurrentDirectory(),
                             "wwwroot\\images\\Actvot",
-                            view.ImageFile.FileName);
+                           file);
 
                         using (var stream = new FileStream(path, FileMode.Create))
                         {
                             await view.ImageFile.CopyToAsync(stream);
                         }
 
-                        path = $"~/images/Actvot/{view.ImageFile.FileName}";
+                        path = $"~/images/Actvot/{file}";
                     }
                     var Actvote = this.ToActvote(view, path);
 

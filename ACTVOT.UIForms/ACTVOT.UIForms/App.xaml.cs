@@ -1,6 +1,7 @@
 ﻿
 namespace ACTVOT.UIForms
 {
+    using ACTVOT.UIForms.ViewModels;
     using Views;
     using Xamarin.Forms;
 
@@ -10,7 +11,8 @@ namespace ACTVOT.UIForms
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage (new LoginPage());
+            MainViewModel.GetInstance().Login = new LoginViewModel();
+            this.MainPage = new NavigationPage (new LoginPage());
         }
 
         protected override void OnStart()
