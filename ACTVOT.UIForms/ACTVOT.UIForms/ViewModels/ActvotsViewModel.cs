@@ -12,11 +12,17 @@ namespace ACTVOT.UIForms.ViewModels
     {
         private readonly ApiService apiService;
         private ObservableCollection<ActVote> actvots;
+        private bool isRefreshing;
 
         public ObservableCollection<ActVote> Actvots
         {
             get { return this.actvots; }
             set { this.SetValue(ref this.actvots, value); }
+        }
+        public bool IsRefreshing
+        {
+            get { return this.isRefreshing; }
+            set { this.SetValue(ref this.isRefreshing, value); }
         }
 
 
@@ -28,11 +34,13 @@ namespace ACTVOT.UIForms.ViewModels
 
         private async void LoadActVotes()
         {
+            this.IsRefreshing = true;
             var response = await this.apiService.GetListAsync<ActVote>(
                 "https://myactivityvote.azurewebsites.net",
                 "/api",
                 "/ActVotes"
                 );
+            this.IsRefreshing = false;
             if (!response.IsSuccess)
             {
                 await Application.Current.MainPage.DisplayAlert(
@@ -42,8 +50,7 @@ namespace ACTVOT.UIForms.ViewModels
                 return;
             }
             var MyActvote = (List<ActVote>)response.Result;
-            this.Actvots  = new ObservableCollection<ActVote>(MyActvote);
+            this.Actvots = new ObservableCollection<ActVote>(MyActvote);
         }
     }
 }
-    
