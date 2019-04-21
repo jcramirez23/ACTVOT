@@ -8,9 +8,11 @@
     using Data;
     using Data.Entities;
     using Helpers;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
+    [Authorize]
     public class ActVotesController : Controller
     {
         private readonly IActVoteRepository actVoteRepository;
@@ -78,8 +80,7 @@
                     path = $"~/images/Actvot/{file}";
                 }
                 var Actvote = this.ToActvote(view, path);
-                //TODO:Change for the logged user
-                Actvote.user = await this.userHelper.GetUserByEmailAsync("jcamilor.454@gmail.com");
+                Actvote.user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await this.actVoteRepository.CreateAsync(Actvote);
                 return RedirectToAction(nameof(Index));
             }
@@ -164,9 +165,7 @@
                         path = $"~/images/Actvot/{file}";
                     }
                     var Actvote = this.ToActvote(view, path);
-
-                    //TODO:Change for the logged user
-                    Actvote.user = await this.userHelper.GetUserByEmailAsync("jcamilor.454@gmail.com");
+                    Actvote.user = await this.userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await this.actVoteRepository.UpdateAsync(Actvote);
                 }
                 catch (DbUpdateConcurrencyException)
