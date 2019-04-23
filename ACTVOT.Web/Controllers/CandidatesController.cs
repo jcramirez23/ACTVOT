@@ -12,29 +12,29 @@ namespace ACTVOT.Web.Controllers
 {
     public class CandidatesController : Controller
     {
-        private readonly DataContext _context;
+        
+        private readonly ICandidatesRepository candidatesRepository;
 
-        public CandidatesController(DataContext context)
+        public CandidatesController(ICandidatesRepository candidatesRepository)
         {
-            _context = context;
+            this.candidatesRepository = candidatesRepository;
         }
 
         // GET: Candidates
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Candidates.ToListAsync());
+            return View(this.candidatesRepository.GetCandidat());
         }
 
         // GET: Candidates/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var candidates = await _context.Candidates
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var candidates = this.candidatesRepository.GetCandidat(id.Value);
             if (candidates == null)
             {
                 return NotFound();
@@ -54,26 +54,26 @@ namespace ACTVOT.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,name,LastName,Polparty")] Candidates candidates)
+        public async Task<IActionResult> Create( Candidates candidates)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(candidates);
-                await _context.SaveChangesAsync();
+                this.candidatesRepository.AddCandidat(candidates);
+                await this.candidatesRepository.SaveAllAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(candidates);
         }
 
         // GET: Candidates/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var candidates = await _context.Candidates.FindAsync(id);
+            var candidates = this.candidatesRepository.GetCandidat(id.Value);
             if (candidates == null)
             {
                 return NotFound();
@@ -86,23 +86,19 @@ namespace ACTVOT.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,name,LastName,Polparty")] Candidates candidates)
+        public async Task<IActionResult> Edit(Candidates candidates)
         {
-            if (id != candidates.Id)
-            {
-                return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(candidates);
-                    await _context.SaveChangesAsync();
+                    this.candidatesRepository.UpdateCandidat(candidates);
+                    await this.candidatesRepository.SaveAllAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CandidatesExists(candidates.Id))
+                    if (!this.candidatesRepository.CandidatExists(candidates.Id))
                     {
                         return NotFound();
                     }
@@ -117,15 +113,14 @@ namespace ACTVOT.Web.Controllers
         }
 
         // GET: Candidates/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var candidates = await _context.Candidates
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var candidates = this.candidatesRepository.GetCandidat(id.Value );
             if (candidates == null)
             {
                 return NotFound();
@@ -139,15 +134,11 @@ namespace ACTVOT.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var candidates = await _context.Candidates.FindAsync(id);
-            _context.Candidates.Remove(candidates);
-            await _context.SaveChangesAsync();
+            var candidates = this.candidatesRepository.GetCandidat(id);
+            this.candidatesRepository.RemoveCandidat(candidates);
+            await this.candidatesRepository.SaveAllAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CandidatesExists(int id)
-        {
-            return _context.Candidates.Any(e => e.Id == id);
-        }
     }
 }

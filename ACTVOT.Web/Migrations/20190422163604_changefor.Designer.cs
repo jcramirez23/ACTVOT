@@ -4,14 +4,16 @@ using ACTVOT.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ACTVOT.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190422163604_changefor")]
+    partial class changefor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,8 +26,6 @@ namespace ACTVOT.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ActCandId");
 
                     b.Property<DateTime>("Actstar");
 
@@ -45,8 +45,6 @@ namespace ACTVOT.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActCandId");
-
                     b.HasIndex("userId");
 
                     b.ToTable("ActVotes");
@@ -58,7 +56,7 @@ namespace ACTVOT.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ImageUrl");
+                    b.Property<int>("ActCandId");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -73,6 +71,8 @@ namespace ACTVOT.Web.Migrations
                         .HasMaxLength(100);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActCandId");
 
                     b.ToTable("Candidates");
                 });
@@ -257,13 +257,17 @@ namespace ACTVOT.Web.Migrations
 
             modelBuilder.Entity("ACTVOT.Web.Data.Entities.ActVote", b =>
                 {
-                    b.HasOne("ACTVOT.Web.Data.Entities.Candidates", "ActCand")
-                        .WithMany()
-                        .HasForeignKey("ActCandId");
-
                     b.HasOne("ACTVOT.Web.Data.Entities.User", "user")
                         .WithMany()
                         .HasForeignKey("userId");
+                });
+
+            modelBuilder.Entity("ACTVOT.Web.Data.Entities.Candidates", b =>
+                {
+                    b.HasOne("ACTVOT.Web.Data.Entities.ActVote", "ActCand")
+                        .WithMany()
+                        .HasForeignKey("ActCandId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

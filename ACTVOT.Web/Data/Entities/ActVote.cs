@@ -30,7 +30,9 @@ namespace ACTVOT.Web.Data.Entities
 
            public User user { get; set; }
 
-           public string ImageFullPath
+          public Candidates ActCand { get; set; }
+
+        public string ImageFullPath
            {
               get
               {

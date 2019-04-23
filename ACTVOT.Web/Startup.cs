@@ -52,6 +52,8 @@ namespace ACTVOT.Web
 
             services.AddScoped<IUserHelper, UserHelper>();
 
+            services.AddScoped<ICandidatesRepository, CandidatesRepository>();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
