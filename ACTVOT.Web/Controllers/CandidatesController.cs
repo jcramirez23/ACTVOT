@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ACTVOT.Web.Data;
+using ACTVOT.Web.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ACTVOT.Web.Data;
-using ACTVOT.Web.Data.Entities;
 
 namespace ACTVOT.Web.Controllers
 {
     public class CandidatesController : Controller
     {
-        
+
         private readonly ICandidatesRepository candidatesRepository;
 
         public CandidatesController(ICandidatesRepository candidatesRepository)
@@ -23,18 +20,18 @@ namespace ACTVOT.Web.Controllers
         // GET: Candidates
         public IActionResult Index()
         {
-            return View(this.candidatesRepository.GetCandidat());
+            return View(this.candidatesRepository.GetAll().OrderBy(p => p.name));
         }
 
         // GET: Candidates/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var candidates = this.candidatesRepository.GetCandidat(id.Value);
+            var candidates = await this.candidatesRepository.GetByIdAsync(id.Value);
             if (candidates == null)
             {
                 return NotFound();
@@ -54,26 +51,26 @@ namespace ACTVOT.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( Candidates candidates)
+        public async Task<IActionResult> Create(Candidates candidates)
         {
             if (ModelState.IsValid)
             {
-                this.candidatesRepository.AddCandidat(candidates);
-                await this.candidatesRepository.SaveAllAsync();
+
+                await this.candidatesRepository.CreateAsync(candidates);
                 return RedirectToAction(nameof(Index));
             }
             return View(candidates);
         }
 
         // GET: Candidates/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var candidates = this.candidatesRepository.GetCandidat(id.Value);
+            var candidates = await this.candidatesRepository.GetByIdAsync(id.Value);
             if (candidates == null)
             {
                 return NotFound();
@@ -93,12 +90,12 @@ namespace ACTVOT.Web.Controllers
             {
                 try
                 {
-                    this.candidatesRepository.UpdateCandidat(candidates);
-                    await this.candidatesRepository.SaveAllAsync();
+
+                    await this.candidatesRepository.UpdateAsync(candidates);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!this.candidatesRepository.CandidatExists(candidates.Id))
+                    if (!await this.candidatesRepository.ExistAsync(candidates.Id))
                     {
                         return NotFound();
                     }
@@ -113,14 +110,14 @@ namespace ACTVOT.Web.Controllers
         }
 
         // GET: Candidates/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var candidates = this.candidatesRepository.GetCandidat(id.Value );
+            var candidates = await this.candidatesRepository.GetByIdAsync(id.Value);
             if (candidates == null)
             {
                 return NotFound();
@@ -134,9 +131,8 @@ namespace ACTVOT.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var candidates = this.candidatesRepository.GetCandidat(id);
-            this.candidatesRepository.RemoveCandidat(candidates);
-            await this.candidatesRepository.SaveAllAsync();
+            var candidates = await this.candidatesRepository.GetByIdAsync(id);
+            await this.candidatesRepository.DeleteAsync(candidates);
             return RedirectToAction(nameof(Index));
         }
 

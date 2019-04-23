@@ -1,23 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using ACTVOT.Web.Data.Entities;
-
-namespace ACTVOT.Web.Data
+﻿namespace ACTVOT.Web.Data
 {
-    public interface ICandidatesRepository
+    using Entities;
+    using System.Linq;
+
+    public interface ICandidatesRepository : IGenericRepository<Candidates>
     {
-        void AddCandidat(Candidates candidates);
 
-        bool CandidatExists(int id);
-
-        IEnumerable<Candidates> GetCandidat();
-
-        Candidates GetCandidat(int id);
-
-        void RemoveCandidat(Candidates candidates);
-
-        Task<bool> SaveAllAsync();
-
-        void UpdateCandidat(Candidates candidates);
     }
 }
