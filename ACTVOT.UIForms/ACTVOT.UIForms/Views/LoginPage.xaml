@@ -1,33 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ACTVOT.UIForms.Views.LoginPage"
-             BindingContext="{Binding Main, Source={StaticResource Locator}}"
-             Title="Login">
+         	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+         	x:Class="ACTVOT.UIForms.Views.LoginPage"
+         	BindingContext="{Binding Main, Source={StaticResource Locator}}"
+         	Title="Login">
     <ContentPage.Content>
         <ScrollView
-            BindingContext="{Binding Login}">
-           <StackLayout
-               Padding="8">
-               <Label
-                    Text="Email">
-               </Label>
-               <Entry
-                   Keyboard="Email"
-                   Placeholder="Enter Your Email..."
-                   Text="{Binding Email}">
-               </Entry>
+        	BindingContext="{Binding Login}">
+            <StackLayout
+            	Padding="10">
+                <Image
+                	HeightRequest="150"
+                	Source="IconVote">
+                </Image>
                 <Label
-                    Text="Password">
+                	Text="Email">
                 </Label>
                 <Entry
-                    IsPassword="True"
-                   Placeholder="Enter Your Password..."
-                   Text="{Binding Password}">
+                	Keyboard="Email"
+                	Placeholder="Enter your email..."
+                	Text="{Binding Email}">
                 </Entry>
+                <Label
+                	Text="Password">
+                </Label>
+                <Entry
+                	IsPassword="True"
+                	Placeholder="Enter your password..."
+                	Text="{Binding Password}">
+                </Entry>
+                <ActivityIndicator
+                	IsRunning="{Binding IsRunning}"
+                	VerticalOptions="CenterAndExpand">
+                </ActivityIndicator>
                 <Button
-                    Command="{Binding LoginCommand}"
-                    Text="Login">
+                	BackgroundColor="Navy"
+                	BorderRadius="23"
+                	Command="{Binding LoginCommand}"
+                	HeightRequest="46"
+                	IsEnabled="{Binding IsEnabled}"
+                	Text="Login"
+                	TextColor="White">
                 </Button>
             </StackLayout>
         </ScrollView>

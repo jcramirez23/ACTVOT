@@ -23,5 +23,7 @@ namespace ACTVOT.Web.Data.Entities
         [Display(Name = "Image")]
         public string ImageUrl { get; set; }
 
+       
+
     }
 }

@@ -56,7 +56,7 @@ namespace ACTVOT.UIForms.ViewModels
 
 
             MainViewModel.GetInstance().Actvots = new ActvotsViewModel();
-            await Application.Current.MainPage.Navigation.PushAsync(new ActvotsPage());
+            Application.Current.MainPage = new MasterPage();
 
         }
     }
