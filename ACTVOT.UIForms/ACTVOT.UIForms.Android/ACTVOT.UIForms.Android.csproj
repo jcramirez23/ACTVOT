@@ -106,7 +106,7 @@
     <AndroidResource Include="Resources\drawable\ic_exit_to_app.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ic_perm_device_information.png" />
+    <AndroidResource Include="Resources\drawable\ic_info.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\ic_phonelink_setup.png" />

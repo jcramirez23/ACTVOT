@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.1.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
@@ -14,6 +15,10 @@
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\images\Candidate\" />
     <Folder Include="wwwroot\images\ActVot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ACTVOT.common\ACTVOT.common.csproj" />
   </ItemGroup>
 
 </Project>

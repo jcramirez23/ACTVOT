@@ -1,6 +1,7 @@
 ﻿using ACTVOT.Web.Data;
 using ACTVOT.Web.Data.Entities;
 using ACTVOT.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace ACTVOT.Web.Controllers
 {
+   
     public class CandidatesController : Controller
     {
 
@@ -20,7 +22,6 @@ namespace ACTVOT.Web.Controllers
             this.candidatesRepository = candidatesRepository;
         }
 
-        // GET: Candidates
         public IActionResult Index()
         {
             return View(this.candidatesRepository.GetAll().OrderBy(p => p.name));
@@ -43,7 +44,7 @@ namespace ACTVOT.Web.Controllers
             return View(candidates);
         }
 
-        // GET: Candidates/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -96,7 +97,7 @@ namespace ACTVOT.Web.Controllers
             };
         }
 
-        // GET: Candidates/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -177,7 +178,7 @@ namespace ACTVOT.Web.Controllers
             return View(view);
         }
 
-        // GET: Candidates/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

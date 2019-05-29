@@ -1,6 +1,9 @@
 ﻿
 namespace ACTVOT.Web
 {
+    using Data;
+    using Data.Entities;
+    using Helpers;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -9,9 +12,9 @@ namespace ACTVOT.Web
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Data;
-    using Data.Entities;
-    using Helpers;
+    using Microsoft.IdentityModel.Tokens;
+    using System.Text;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -27,6 +30,8 @@ namespace ACTVOT.Web
 
             services.AddIdentity<User, IdentityRole>(cfg =>
             {
+                cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
+                cfg.SignIn.RequireConfirmedEmail = true;
                 cfg.User.RequireUniqueEmail = true;
                 cfg.Password.RequireDigit = false;
                 cfg.Password.RequiredUniqueChars = 0;
@@ -35,7 +40,22 @@ namespace ACTVOT.Web
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequiredLength = 6;
             })
-        .AddEntityFrameworkStores<DataContext>();
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<DataContext>();
+
+            services.AddAuthentication()
+    .AddCookie()
+    .AddJwtBearer(cfg =>
+    {
+        cfg.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = this.Configuration["Tokens:Issuer"],
+            ValidAudience = this.Configuration["Tokens:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(this.Configuration["Tokens:Key"]))
+        };
+    });
+
 
             services.AddDbContext<DataContext>(cfg =>
             {
@@ -43,17 +63,13 @@ namespace ACTVOT.Web
             });
 
             services.AddTransient<SeedDb>();
-
             services.AddScoped<IActVoteRepository, ActVoteRepository>();
-
             services.AddScoped<ICountryRepository, CountryRepository>();
-
             services.AddScoped<IPolpartyRepository, PolpartyRepository>();
-
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<IMailHelper, MailHelper>();
 
             services.AddScoped<ICandidatesRepository, CandidatesRepository>();
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

@@ -12,7 +12,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
-    [Authorize]
+   
     public class ActVotesController : Controller
     {
         private readonly IActVoteRepository actVoteRepository;
@@ -47,7 +47,7 @@
             return View(actVote);
         }
 
-        // GET: ActVotes/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -103,7 +103,7 @@
 
         }
 
-        // GET: ActVotes1/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -184,7 +184,7 @@
             return View(view);
         }
 
-        // GET: ActVotes1/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

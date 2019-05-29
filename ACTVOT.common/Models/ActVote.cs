@@ -13,10 +13,10 @@ namespace ACTVOT.common.Models
         public string Name { get; set; }
 
         [JsonProperty("actstar")]
-        public DateTimeOffset Actstar { get; set; }
+        public DateTime Actstar { get; set; }
 
         [JsonProperty("endstar")]
-        public DateTimeOffset Endstar { get; set; }
+        public DateTime Endstar { get; set; }
 
         [JsonProperty("imageUrl")]
         public object ImageUrl { get; set; }
